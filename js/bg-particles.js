@@ -7,13 +7,8 @@
 (function () {
   'use strict';
 
-  var CONFIG = {
-    nodeColor: '#888888',
-    linkColor: '#888888',
-    cursorLinkColor: '#2E8B57',
-    nodeOpacity: 0.72,
-    baseLinkOpacity: 0.27,
-    cursorLinkOpacity: 0.5,
+  /* Shared (non-color) settings */
+  var SHARED = {
     linkDistance: 140,
     cursorDistance: 150,
     minParticles: 50,
@@ -24,11 +19,46 @@
     radiusMax: 2.6,
     hubRatio: 0.14,
     hubScale: 1.9,
-    glowColor: '136, 136, 136',
     glowRadius: 5,
-    glowOpacity: 0.22,
     bounceDamping: 0.6
   };
+
+  /* Theme-specific palettes */
+  var THEMES = {
+    light: {
+      nodeColor: '#888888',
+      linkColor: '#888888',
+      cursorLinkColor: '#2E8B57',
+      nodeOpacity: 0.72,
+      baseLinkOpacity: 0.27,
+      cursorLinkOpacity: 0.5,
+      glowColor: '136, 136, 136',
+      glowOpacity: 0.22
+    },
+    dark: {
+      nodeColor: '#5ee89c',
+      linkColor: '#3fbc73',
+      cursorLinkColor: '#5ee89c',
+      nodeOpacity: 0.6,
+      baseLinkOpacity: 0.18,
+      cursorLinkOpacity: 0.45,
+      glowColor: '94, 232, 156',
+      glowOpacity: 0.16
+    }
+  };
+
+  /** Return merged config for the current theme. */
+  function getConfig() {
+    var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    var palette = isDark ? THEMES.dark : THEMES.light;
+    var cfg = {};
+    var key;
+    for (key in SHARED) { cfg[key] = SHARED[key]; }
+    for (key in palette) { cfg[key] = palette[key]; }
+    return cfg;
+  }
+
+  var CONFIG = getConfig();
 
   function createBackground(canvas) {
     var ctx = canvas.getContext('2d');
@@ -217,6 +247,18 @@
     } else {
       start();
     }
+
+    // Live-update particle colors when theme changes
+    var observer = new MutationObserver(function (mutations) {
+      for (var i = 0; i < mutations.length; i++) {
+        if (mutations[i].attributeName === 'data-theme') {
+          CONFIG = getConfig();
+          if (reduceMotion) drawStatic();
+          break;
+        }
+      }
+    });
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
   }
 
   function init() {

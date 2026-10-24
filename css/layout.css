@@ -274,6 +274,131 @@ section {
   }
 }
 
+/* ==========================================================================
+   Running Figure Animation (on timeline progress track)
+   ========================================================================== */
+.runner-wrap {
+  position: absolute;
+  top: -14px;
+  left: calc(50% - 9px);
+  z-index: 3;
+  pointer-events: none;
+  animation: runner-bob 0.24s ease-in-out infinite alternate;
+}
+
+.runner {
+  position: relative;
+  width: 18px;
+  height: 26px;
+}
+
+/* Head */
+.runner-head {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+/* Torso */
+.runner-body {
+  position: absolute;
+  top: 7px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2px;
+  height: 9px;
+  background: var(--accent);
+  border-radius: 1px;
+}
+
+/* Legs */
+.runner-leg {
+  position: absolute;
+  top: 15px;
+  width: 2px;
+  height: 10px;
+  background: var(--accent);
+  border-radius: 1px;
+  transform-origin: top center;
+}
+
+.runner-leg-l {
+  left: 7px;
+  animation: runner-leg-l 0.24s ease-in-out infinite alternate;
+}
+
+.runner-leg-r {
+  left: 9px;
+  animation: runner-leg-r 0.24s ease-in-out infinite alternate;
+}
+
+/* Arms */
+.runner-arm {
+  position: absolute;
+  top: 8px;
+  width: 2px;
+  height: 8px;
+  background: var(--accent);
+  border-radius: 1px;
+  transform-origin: top center;
+}
+
+.runner-arm-l {
+  left: 5px;
+  animation: runner-arm-l 0.24s ease-in-out infinite alternate;
+}
+
+.runner-arm-r {
+  left: 11px;
+  animation: runner-arm-r 0.24s ease-in-out infinite alternate;
+}
+
+/* Run cycle keyframes */
+@keyframes runner-bob {
+  0%   { transform: translateY(0); }
+  100% { transform: translateY(-2px); }
+}
+
+@keyframes runner-leg-l {
+  0%   { transform: rotate(35deg); }
+  100% { transform: rotate(-30deg); }
+}
+
+@keyframes runner-leg-r {
+  0%   { transform: rotate(-30deg); }
+  100% { transform: rotate(35deg); }
+}
+
+@keyframes runner-arm-l {
+  0%   { transform: rotate(-28deg); }
+  100% { transform: rotate(22deg); }
+}
+
+@keyframes runner-arm-r {
+  0%   { transform: rotate(22deg); }
+  100% { transform: rotate(-28deg); }
+}
+
+/* Mobile: runner repositioned for vertical timeline */
+@media (max-width: 860px) {
+  .runner-wrap {
+    top: -6px;
+    left: -6px;
+  }
+}
+
+/* Reduced motion: hide runner entirely */
+@media (prefers-reduced-motion: reduce) {
+  .runner-wrap {
+    display: none;
+  }
+}
+
 /* Step Content */
 .step-content {
   display: flex;
