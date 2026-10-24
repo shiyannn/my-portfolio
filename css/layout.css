@@ -72,6 +72,11 @@ section {
   margin: 0 auto;
 }
 
+.hero h1 em {
+  color: var(--accent);
+  font-style: italic;
+}
+
 .hero .lede {
   max-width: 60ch;
   margin: 24px auto 0;
@@ -147,9 +152,6 @@ section {
   aspect-ratio: 4 / 5;
   object-fit: cover;
   border-radius: var(--radius);
-  border: 1px solid var(--line);
-  background: var(--surface);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
 }
 
 .about-body h2 {
