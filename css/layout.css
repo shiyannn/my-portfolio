@@ -139,6 +139,8 @@ section {
 
 .about-photo {
   justify-self: start;
+  width: 100%;
+  max-width: 240px;
 }
 
 .about-body {
@@ -147,11 +149,11 @@ section {
 }
 
 .about-photo img {
+  display: block;
   width: 100%;
   height: auto;
-  aspect-ratio: 4 / 5;
-  object-fit: cover;
   border-radius: var(--radius);
+  filter: drop-shadow(0 12px 26px rgba(16, 24, 40, 0.14));
 }
 
 .about-body h2 {

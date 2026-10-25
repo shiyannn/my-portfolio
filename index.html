@@ -164,8 +164,8 @@
       <section id="about" class="wrap">
         <div class="about">
           <div class="about-photo reveal">
-            <img src="assets/pic.jpg" alt="Portrait of Shiane Carl Roblas" width="240" height="300" loading="lazy"
-              decoding="async" />
+            <img src="assets/pic-cutout.png" alt="Portrait of Shiane Carl Roblas" width="240" height="225"
+              loading="lazy" decoding="async" />
           </div>
 
           <div class="about-body reveal">
@@ -446,74 +446,79 @@
           <p>Verified credentials across the analytics stack I build with daily.</p>
         </div>
 
-        <article class="certificate reveal">
+        <article class="certificate reveal" data-cert-id="pl-300" data-cert-url=""
+          data-cert-image="" data-cert-badges="Power BI, DAX, Data Modeling, Visualization">
           <span class="issuer">Microsoft</span>
           <div>
             <h3>Microsoft Certified: Data Analyst Associate (PL-300)</h3>
             <p>Power BI data modelling, DAX, visualisation and workspace governance.</p>
           </div>
-          <a class="readmore" href="#contact">Credential
+          <button class="readmore" type="button" aria-haspopup="dialog">Credential
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
               stroke-linejoin="round" aria-hidden="true">
               <path d="M5 12h14M13 6l6 6-6 6" />
             </svg>
-          </a>
+          </button>
         </article>
 
-        <article class="certificate reveal">
+        <article class="certificate reveal" data-cert-id="dp-600" data-cert-url=""
+          data-cert-image="" data-cert-badges="Azure, SQL, Data Preparation, Power BI">
           <span class="issuer">Microsoft</span>
           <div>
             <h3>Microsoft Certified: Azure Data Analyst Associate (DP-600)</h3>
             <p>Preparing and cleaning data, SQL querying and building Power BI reports on Azure.</p>
           </div>
-          <a class="readmore" href="#contact">Credential
+          <button class="readmore" type="button" aria-haspopup="dialog">Credential
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
               stroke-linejoin="round" aria-hidden="true">
               <path d="M5 12h14M13 6l6 6-6 6" />
             </svg>
-          </a>
+          </button>
         </article>
 
-        <article class="certificate reveal">
+        <article class="certificate reveal" data-cert-id="aws-data-analytics" data-cert-url=""
+          data-cert-image="" data-cert-badges="Data Pipelines, Warehousing, Analytics, AWS">
           <span class="issuer">Amazon Web Services</span>
           <div>
             <h3>AWS Certified Data Analytics — Specialty</h3>
             <p>Data pipelines, warehousing and analytics architecture on AWS.</p>
           </div>
-          <a class="readmore" href="#contact">Credential
+          <button class="readmore" type="button" aria-haspopup="dialog">Credential
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
               stroke-linejoin="round" aria-hidden="true">
               <path d="M5 12h14M13 6l6 6-6 6" />
             </svg>
-          </a>
+          </button>
         </article>
 
-        <article class="certificate reveal">
+        <article class="certificate reveal" data-cert-id="oracle-sql" data-cert-url=""
+          data-cert-image="" data-cert-badges="SQL, Query Tuning, Relational Modeling">
           <span class="issuer">Oracle</span>
           <div>
             <h3>Oracle Certified Professional: SQL Developer</h3>
             <p>Advanced SQL, query tuning and relational modelling fundamentals.</p>
           </div>
-          <a class="readmore" href="#contact">Credential
+          <button class="readmore" type="button" aria-haspopup="dialog">Credential
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
               stroke-linejoin="round" aria-hidden="true">
               <path d="M5 12h14M13 6l6 6-6 6" />
             </svg>
-          </a>
+          </button>
         </article>
 
-        <article class="certificate reveal">
+        <article class="certificate reveal" data-cert-id="tableau-desktop" data-cert-url=""
+          data-cert-image="" data-cert-badges="Tableau, Dashboards, Visual Analytics">
           <span class="issuer">Tableau</span>
           <div>
             <h3>Tableau Desktop Specialist Certification</h3>
             <p>Interactive dashboards, data connections and visual analytics design.</p>
           </div>
-          <a class="readmore" href="#contact">Credential
+          <button class="readmore" type="button" aria-haspopup="dialog">Credential
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
               stroke-linejoin="round" aria-hidden="true">
               <path d="M5 12h14M13 6l6 6-6 6" />
             </svg>
-          </a>
+          </button>
         </article>
       </section>
 
@@ -643,12 +648,61 @@
   </div>
 
 
+  <!-- CREDENTIAL DETAIL MODAL -->
+  <div class="project-modal-backdrop" id="cert-modal" aria-hidden="true" role="dialog" aria-modal="true"
+    aria-labelledby="cert-modal-title">
+    <div class="project-modal-dialog">
+      <button class="modal-close-btn" id="cert-modal-close" aria-label="Close credential details">
+        <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="1.8" fill="none"
+          stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+
+      <div class="modal-scroll-body">
+        <div class="modal-preview" id="cert-modal-preview" hidden>
+          <img id="cert-modal-img" src="" alt="" />
+        </div>
+
+        <h2 id="cert-modal-title" class="modal-title"></h2>
+        <p id="cert-modal-subtitle" class="modal-subtitle"></p>
+
+        <div class="modal-action">
+          <a id="cert-modal-visit" class="btn-visit" href="#" target="_blank" rel="noopener noreferrer"
+            aria-label="Verify credential">
+            <svg class="btn-github-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M14 3h7v7" />
+              <path d="M10 14 21 3" />
+              <path d="M21 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5" />
+            </svg>
+            <span id="cert-modal-visit-text">Verify Credential</span>
+          </a>
+        </div>
+
+        <div class="modal-content-section">
+          <h3 class="modal-section-heading">About this credential</h3>
+          <hr class="modal-divider" />
+          <div id="cert-modal-description" class="modal-desc-text"></div>
+
+          <div class="modal-meta">
+            <span class="modal-meta-label">Skills:</span>
+            <ul id="cert-modal-badges" class="modal-tech-badges"></ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
   <script src="js/theme-toggle.js"></script>
   <script src="js/bg-particles.js" defer></script>
   <script src="js/nav.js" defer></script>
   <script src="js/reveal.js" defer></script>
   <script src="js/contact-form.js" defer></script>
   <script src="js/project-grid.js" defer></script>
+  <script src="js/certificates.js" defer></script>
   <script src="js/main.js" defer></script>
 </body>
 

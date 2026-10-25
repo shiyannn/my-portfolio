@@ -278,6 +278,10 @@
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
 }
 
+.modal-preview[hidden] {
+  display: none;
+}
+
 .modal-preview img {
   width: 100%;
   height: auto;
@@ -352,6 +356,11 @@
 
 .btn-visit:hover .btn-github-icon {
   transform: scale(1.08);
+}
+
+.btn-visit.is-disabled {
+  opacity: 0.5;
+  pointer-events: none;
 }
 
 /* Content Section: Description */

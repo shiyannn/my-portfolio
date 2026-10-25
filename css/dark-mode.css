@@ -85,6 +85,11 @@ html.theme-transitioning *::after {
   color: var(--bg);
 }
 
+/* ---------- About portrait ---------- */
+[data-theme="dark"] .about-photo img {
+  filter: drop-shadow(0 14px 30px rgba(0, 0, 0, 0.55));
+}
+
 /* ---------- Cards ---------- */
 [data-theme="dark"] .card {
   background: var(--surface);
