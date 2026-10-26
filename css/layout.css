@@ -503,7 +503,10 @@ section {
   .about {
     grid-template-columns: 1fr;
     gap: 28px;
-    align-items: start;
+    align-items: center;
+  }
+  .about-photo {
+    justify-self: center;
   }
 
   .about-body {
