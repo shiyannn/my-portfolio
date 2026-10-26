@@ -8,9 +8,21 @@
   align-items: center;
   gap: 10px;
   font-family: var(--font-display);
-  font-weight: 700;
+  font-weight: 400;
   font-size: 1.05rem;
   letter-spacing: -0.02em;
+  color: var(--ink-soft);
+  transition: color var(--dur) var(--ease);
+}
+
+.logo:hover {
+  color: var(--ink);
+}
+
+.logo .logo-mark {
+  display: block;
+  width: auto;
+  height: 30px;
 }
 
 .logo .mark {

@@ -47,6 +47,10 @@ html.theme-transitioning *::after {
   background: rgba(15, 17, 23, 0.94);
 }
 
+[data-theme="dark"] .logo .logo-mark {
+  filter: invert(1);
+}
+
 /* Mobile nav background */
 @media (max-width: 760px) {
   [data-theme="dark"] nav.primary {

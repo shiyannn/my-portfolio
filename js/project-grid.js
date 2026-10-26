@@ -23,17 +23,17 @@
       badges: ['Excel', 'Pivot Tables', 'Advanced Formulas', 'Data Visualization']
     },
     'sales-data-cleanroom': {
-      title: 'Naga City Dengue Surveillance-Outbreak Control Insights',
-      subtitle: 'Analyzing dengue cases in Naga City to identify patterns, trends, and risk factors for early outbreak detection and control.',
-      image: 'assets/projects/Naga_Dengue_Dashboard.png',
-      repoUrl: 'https://github.com/shiyannn/Naga-City-Dengue-Surveillance-Outbreak-Control-Insights',
+      title: 'Naga City Crime Surveillance and Prevention',
+      subtitle: 'Analyzing crime cases in Naga City to identify patterns, trends, and risk factors for early crime prevention and control.',
+      image: 'assets/projects/',
+      repoUrl: 'https://github.com/shiyannn/',
       visitLabel: 'View GitHub Repo',
-      description: 'This report presents key data insights and action plans based on the Naga City Dengue Dashboard. The goal is to lower dengue cases, protect high-risk age groups, and keep community health systems strong.',
+      description: 'This report presents key data insights and action plans based on the Naga City Crime Dashboard. The goal is to lower crime cases, protect high-risk age groups, and keep community health systems strong.',
       badges: ['Power BI', 'Excel', 'Data Cleaning', 'SQL']
     },
     'support-ops-scorecard': {
-      title: 'Support Ops Scorecard',
-      subtitle: 'Real-time operational scorecard tracking SLA adherence, agent load, and queue backlogs.',
+      title: 'Naga City Dengue Surveillance-Outbreak Control Insights',
+      subtitle: 'Analyzing dengue cases in Naga City to identify patterns, trends, and risk factors for early outbreak detection and control.',
       image: 'assets/projects/Naga_Dengue_Dashboard.png',
       repoUrl: 'https://github.com/shiyannn/Naga-City-Dengue-Surveillance-Outbreak-Control-Insights',
       visitLabel: 'View GitHub Repo',

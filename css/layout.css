@@ -132,20 +132,20 @@ section {
 /* About */
 .about {
   display: grid;
-  grid-template-columns: 240px 1fr;
-  gap: 64px;
+  grid-template-columns: minmax(280px, 320px) 1fr;
+  gap: 56px;
   align-items: center;
 }
 
 .about-photo {
   justify-self: start;
   width: 100%;
-  max-width: 240px;
+  max-width: 320px;
 }
 
 .about-body {
   max-width: 60ch;
-  justify-self: end;
+  justify-self: start;
 }
 
 .about-photo img {
@@ -154,6 +154,11 @@ section {
   height: auto;
   border-radius: var(--radius);
   filter: drop-shadow(0 12px 26px rgba(16, 24, 40, 0.14));
+  transition: transform var(--dur) var(--ease), filter var(--dur) var(--ease);
+}
+
+.about-photo img:hover {
+  transform: translateY(-4px) scale(1.02);
 }
 
 .about-body h2 {
@@ -469,7 +474,8 @@ section {
   flex-wrap: wrap;
   gap: 14px;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
+  text-align: center;
 }
 
 .foot p {
@@ -502,11 +508,19 @@ section {
 
   .about {
     grid-template-columns: 1fr;
-    gap: 28px;
+    gap: 32px;
     align-items: center;
   }
+
   .about-photo {
     justify-self: center;
+    width: 100%;
+    max-width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    text-align: center;
   }
 
   .about-body {
@@ -515,7 +529,9 @@ section {
   }
 
   .about-photo img {
-    max-width: 200px;
+    width: 100%;
+    max-width: clamp(220px, 70vw, 300px);
+    margin: 0 auto;
   }
 
   .career-timeline {
