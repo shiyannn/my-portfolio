@@ -1,0 +1,125 @@
+/* ==========================================
+   pixel-office.css — decorative AI-agent office
+   ========================================== */
+
+:root {
+  --office-wall: #efe8da;
+  --office-wall-shade: #e7ded0;
+  --office-trim: #d9cdb9;
+  --office-floor: #c9a26b;
+  --office-floor-shade: #c0965d;
+  --office-desk: #8a6a45;
+  --office-desk-dark: #6a4f33;
+  --office-paper: #f8f2e4;
+  --office-plant: #3f7d4f;
+  --office-plant-dark: #2f6340;
+  --office-sky: #bcdcef;
+  --office-sun: #f2c14e;
+  --office-screen: #1e2530;
+  --office-chart-a: #2e8b57;
+  --office-chart-b: #4d8fc4;
+  --office-chart-c: #d9a441;
+  --office-bubble-bg: #fffdf6;
+  --office-bubble-border: #2b2219;
+  --office-bubble-text: #23272f;
+}
+
+[data-theme="dark"] {
+  --office-wall: #262b37;
+  --office-wall-shade: #222733;
+  --office-trim: #343b4c;
+  --office-floor: #3b3448;
+  --office-floor-shade: #352f41;
+  --office-desk: #4a3b2e;
+  --office-desk-dark: #352a21;
+  --office-paper: #d3d9e6;
+  --office-plant: #4a8a5c;
+  --office-plant-dark: #376b46;
+  --office-sky: #10172a;
+  --office-sun: #e9e5d6;
+  --office-screen: #0b0f17;
+  --office-chart-a: #4fbf82;
+  --office-chart-b: #68a9e0;
+  --office-chart-c: #e8b95a;
+  --office-bubble-bg: #1f2330;
+  --office-bubble-border: #3a4154;
+  --office-bubble-text: #e8ecf5;
+}
+
+.pixel-office {
+  margin: 28px 0 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  overflow: hidden;
+  box-shadow: 0 14px 28px rgba(16, 24, 40, 0.06);
+}
+
+.pixel-office-chrome {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 10px;
+  background: var(--bg);
+  border-bottom: 1px solid var(--line);
+}
+
+.pixel-office-chrome span:not(.pixel-office-title) {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--line);
+}
+
+.pixel-office-chrome span:not(.pixel-office-title):first-child {
+  background: var(--accent);
+}
+
+.pixel-office-title {
+  margin-left: auto;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.pixel-office-screen {
+  height: 190px;
+  background: var(--office-wall);
+}
+
+.pixel-office-screen canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+}
+
+.pixel-office figcaption {
+  padding: 9px 12px 10px;
+  border-top: 1px solid var(--line);
+  font-size: 0.74rem;
+  line-height: 1.45;
+  color: var(--muted);
+}
+
+@media (max-width: 860px) {
+  .pixel-office-screen {
+    height: 170px;
+  }
+}
+
+@media (max-width: 480px) {
+  .pixel-office {
+    margin-top: 24px;
+  }
+
+  .pixel-office-screen {
+    height: 150px;
+  }
+
+  .pixel-office figcaption {
+    font-size: 0.7rem;
+  }
+}
