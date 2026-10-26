@@ -16,20 +16,36 @@
   var FONT = {
     ' ': ['000', '000', '000', '000', '000'],
     '/': ['001', '001', '010', '100', '100'],
+    '!': ['010', '010', '010', '000', '010'],
+    '?': ['110', '001', '010', '000', '010'],
+    '.': ['000', '000', '000', '000', '010'],
+    '-': ['000', '000', '111', '000', '000'],
     A: ['111', '101', '111', '101', '101'],
     B: ['110', '101', '110', '101', '110'],
+    C: ['111', '100', '100', '100', '111'],
     D: ['110', '101', '101', '101', '110'],
     E: ['111', '100', '110', '100', '111'],
+    F: ['111', '100', '110', '100', '100'],
+    G: ['111', '100', '101', '101', '111'],
     H: ['101', '101', '111', '101', '101'],
     I: ['111', '010', '010', '010', '111'],
+    J: ['001', '001', '001', '101', '010'],
+    K: ['101', '110', '100', '110', '101'],
     L: ['100', '100', '100', '100', '111'],
+    M: ['101', '111', '101', '101', '101'],
     N: ['101', '111', '111', '101', '101'],
     O: ['111', '101', '101', '101', '111'],
     P: ['111', '101', '111', '100', '100'],
     Q: ['111', '101', '101', '111', '001'],
+    R: ['110', '101', '110', '101', '101'],
     S: ['111', '100', '111', '001', '111'],
     T: ['111', '010', '010', '010', '010'],
-    Y: ['101', '101', '010', '010', '010']
+    U: ['101', '101', '101', '101', '111'],
+    V: ['101', '101', '101', '101', '010'],
+    W: ['101', '101', '101', '111', '101'],
+    X: ['101', '101', '010', '101', '101'],
+    Y: ['101', '101', '010', '010', '010'],
+    Z: ['111', '001', '010', '100', '111']
   };
 
   var BODY = [
@@ -65,10 +81,56 @@
     '.OO..OO...'
   ]);
 
+  // Shiyan: Mafia boss attire — all black suit, sleek jet hair, and dark shades with reflection shine
+  var SHIYAN_BODY = [
+    '..HHHH....', // 0: Hair
+    '.HHHHHH...', // 1: Hair
+    '.HHKKHH...', // 2: Hair & Forehead skin
+    '.SSSSSS...', // 3: Sunglasses top frame
+    '.SLSSLS...', // 4: Sunglasses lenses (S = black shade, L = shine glint)
+    '..KKKK....', // 5: Jaw / Chin
+    '...KK.....', // 6: Neck
+    '..CCCC....', // 7: Suit collar
+    '.CCTCC....', // 8: Suit chest (T = lapel/tie accent)
+    'DCCCCCCD..', // 9: Suit arms
+    'DCCCCCCD..', // 10: Suit arms
+    '.CCCCCC...', // 11: Suit waist
+    '.GGGGGG...', // 12: Tailored black trousers
+    '.GG..GG...', // 13: Legs
+    '.GG..GG...', // 14: Legs
+    '.OO..OO...'  // 15: Polished black shoes
+  ];
+
+  var SHIYAN_WALK_A = SHIYAN_BODY.slice(0, 12).concat([
+    '.GGGGGG...',
+    'GG....GG..',
+    '.G....G...',
+    'OO....OO..'
+  ]);
+
+  var SHIYAN_WALK_B = SHIYAN_BODY.slice(0, 12).concat([
+    '.GGGGGG...',
+    '..GGGG....',
+    '..G..G....',
+    '.OO..OO...'
+  ]);
+
+  var SHIYAN_COLORS = {
+    H: '#090a0d', // Jet black hair
+    K: '#f6d5b0', // Skin tone
+    S: '#000000', // Jet black shades
+    L: '#dbeafe', // Cool glass reflection shine
+    C: '#111317', // Mafia black suit jacket
+    D: '#07080b', // Suit cuff / shadows
+    T: '#252932', // Dark charcoal lapel / tie
+    G: '#14171e', // Black tailored pants
+    O: '#07080a'  // Polished black dress shoes
+  };
+
   var AGENT_DEFS = [
-    { label: 'DATA', shirt: '#2e8b57', shade: '#257347', hair: '#2f2119', skin: '#f0c8a0' },
+    { label: 'EXCEL', shirt: '#2e8b57', shade: '#257347', hair: '#2f2119', skin: '#f0c8a0' },
     { label: 'SQL', shirt: '#3f6fa8', shade: '#325a89', hair: '#1d1712', skin: '#c98d63' },
-    { label: 'ETL', shirt: '#c2763a', shade: '#a15f2b', hair: '#4a3324', skin: '#8d5a3b' },
+    { label: 'OPENCODE', shirt: '#0f0d0bff', shade: '#a15f2b', hair: '#4a3324', skin: '#8d5a3b' },
     { label: 'BI', shirt: '#7c5c9e', shade: '#64487f', hair: '#241b16', skin: '#e6b98e' }
   ];
 
@@ -80,6 +142,16 @@
 
   var palette = null;
   var agents = [];
+  var shiyan = {
+    x: 0,
+    destX: 0,
+    state: 'observe', // 'walk' | 'observe'
+    timer: 3.5,
+    facing: 1, // 1 = right, -1 = left
+    walkPhase: 0,
+    hovered: false,
+    spotIndex: 2
+  };
   var particles = [];
   var elapsed = 0;
   var lastTime = 0;
@@ -159,6 +231,32 @@
     return true;
   }
 
+  function getShiyanSpots() {
+    if (!layout.desks || !layout.desks.length) return [];
+    var p = layout.p;
+    return [
+      { x: Math.round(layout.desks[0] - p * 6), face: 1 },                 // Left of Desk 0 (DATA)
+      { x: Math.round((layout.desks[0] + layout.desks[1]) / 2), face: 1 }, // Between Desk 0 & 1 (SQL)
+      { x: layout.windowSpotX, face: -1 },                                 // Center under sign / window
+      { x: Math.round((layout.desks[1] + layout.desks[2]) / 2), face: 1 }, // Between Desk 1 & 2 (ETL)
+      { x: Math.round((layout.desks[2] + layout.desks[3]) / 2), face: 1 }, // Between Desk 2 & 3 (BI)
+      { x: layout.plantSpotX, face: -1 },                                  // Right near plant & wall chart
+      { x: layout.coffeeSpotX, face: 1 }                                   // Left near coffee station
+    ];
+  }
+
+  function resetShiyan() {
+    var spots = getShiyanSpots();
+    shiyan.spotIndex = 2;
+    shiyan.x = spots.length ? spots[2].x : Math.round(layout.w * 0.5);
+    shiyan.destX = shiyan.x;
+    shiyan.state = 'observe';
+    shiyan.timer = rand(3, 5);
+    shiyan.facing = -1;
+    shiyan.walkPhase = 0;
+    shiyan.hovered = false;
+  }
+
   function resetAgents() {
     for (var i = 0; i < agents.length; i++) {
       var a = agents[i];
@@ -173,6 +271,7 @@
       a.returnHome = false;
       a.walkPhase = 0;
     }
+    resetShiyan();
   }
 
   function createAgents() {
@@ -193,6 +292,42 @@
       };
     });
     resetAgents();
+  }
+
+  function updateShiyan(dt) {
+    var p = layout.p;
+    var spots = getShiyanSpots();
+    if (!spots.length) return;
+
+    if (shiyan.state === 'observe') {
+      shiyan.timer -= dt;
+      if (shiyan.timer <= 0) {
+        var nextIdx;
+        do {
+          nextIdx = Math.floor(Math.random() * spots.length);
+        } while (nextIdx === shiyan.spotIndex && spots.length > 1);
+        shiyan.spotIndex = nextIdx;
+        shiyan.destX = spots[nextIdx].x;
+        shiyan.state = 'walk';
+        shiyan.facing = shiyan.destX > shiyan.x ? 1 : -1;
+      }
+      return;
+    }
+
+    if (shiyan.state === 'walk') {
+      var step = p * 20 * dt;
+      var dx = shiyan.destX - shiyan.x;
+      if (Math.abs(dx) <= step) {
+        shiyan.x = shiyan.destX;
+        shiyan.state = 'observe';
+        shiyan.timer = rand(3, 5);
+        shiyan.facing = spots[shiyan.spotIndex].face;
+      } else {
+        shiyan.x += (dx > 0 ? step : -step);
+        shiyan.walkPhase += dt * 8.5;
+        shiyan.facing = dx > 0 ? 1 : -1;
+      }
+    }
   }
 
   function startBreak(a) {
@@ -276,6 +411,7 @@
     elapsed += dt;
 
     for (var i = 0; i < agents.length; i++) updateAgent(agents[i], dt);
+    updateShiyan(dt);
 
     confettiTimer -= dt;
     if (confettiTimer <= 0) {
@@ -306,7 +442,7 @@
   function drawText(text, x, y, p, color) {
     ctx.fillStyle = color;
     for (var i = 0; i < text.length; i++) {
-      var glyph = FONT[text.charAt(i)];
+      var glyph = FONT[text.charAt(i).toUpperCase()];
       if (!glyph) continue;
       var gx = Math.round(x + i * 4 * p);
       for (var r = 0; r < 5; r++) {
@@ -482,18 +618,23 @@
     if (!text) return;
 
     var p = layout.p;
-    var textW = text.length * 4 * p - p;
-    var bw = textW + 4 * p;
-    var bh = 9 * p;
+    var tp = Math.max(1, p <= 2 ? 1 : 2); // delicate font scale (not chunky/bold)
+    var borderSize = 1;
+
+    var textW = text.length * 4 * tp - tp;
+    var bw = textW + 4 * tp + 2;
+    var bh = 5 * tp + 4;
     var headTop = layout.fy - p - 16 * p;
     var bx = Math.round(a.homeX - bw / 2);
-    var by = headTop - bh - 2 * p;
+    var by = Math.round(headTop - bh - 2 * p);
 
     box(bx, by, bw, bh, palette.bubbleBorder);
-    box(bx + p, by + p, bw - 2 * p, bh - 2 * p, palette.bubbleBg);
-    drawText(text, bx + 2 * p, by + 2 * p, p, palette.bubbleText);
-    box(Math.round(a.homeX - p), by + bh, 2 * p, p, palette.bubbleBorder);
-    box(Math.round(a.homeX - p), by + bh + p, p, p, palette.bubbleBorder);
+    box(bx + borderSize, by + borderSize, bw - 2 * borderSize, bh - 2 * borderSize, palette.bubbleBg);
+    drawText(text, bx + 2 * tp + 1, by + 2, tp, palette.bubbleText);
+
+    // Subtle pointer
+    var tipX = Math.round(a.homeX);
+    box(tipX - 1, by + bh, 2, 2, palette.bubbleBorder);
   }
 
   function drawParticles() {
@@ -527,7 +668,189 @@
       }
     }
 
+    // Shiyan: Mafia Boss observing the office
+    drawShiyan(still, time);
+
     drawParticles();
+  }
+
+  function drawShiyan(still, time) {
+    var p = layout.p;
+    var feetY = layout.fy - p;
+    var walking = !still && shiyan.state === 'walk';
+    var map = SHIYAN_BODY;
+    if (walking) {
+      map = (Math.floor(shiyan.walkPhase) % 2 === 0) ? SHIYAN_WALK_A : SHIYAN_WALK_B;
+    }
+    var flip = shiyan.facing < 0;
+    drawSprite(map, SHIYAN_COLORS, shiyan.x - 5 * p, feetY - 16 * p, p, flip);
+
+    // Speech bubble "CLICK ME" — sleek, non-bold font scale
+    var text = 'CLICK ME';
+    var tp = Math.max(1, p <= 2 ? 1 : 2);
+    var borderSize = 1;
+
+    var textW = text.length * 4 * tp - tp;
+    var bw = textW + 4 * tp + 4;
+    var bh = 5 * tp + 4;
+    var headTop = feetY - 16 * p;
+    var floatOffset = still ? 0 : Math.sin(time * 3.5) * (p * 0.7);
+    var bx = Math.round(shiyan.x - bw / 2);
+    bx = clamp(bx, p * 2, layout.w - bw - p * 2);
+    var by = Math.round(headTop - bh - 3 * p + floatOffset);
+
+    // Hover effect highlight
+    var borderCol = shiyan.hovered ? (night ? '#e8b95a' : '#d9a441') : palette.bubbleBorder;
+    var bgCol = shiyan.hovered ? (night ? '#262d3d' : '#ffffff') : palette.bubbleBg;
+    var textCol = shiyan.hovered ? (night ? '#ffd778' : '#b27715') : palette.bubbleText;
+
+    box(bx, by, bw, bh, borderCol);
+    box(bx + borderSize, by + borderSize, bw - 2 * borderSize, bh - 2 * borderSize, bgCol);
+    drawText(text, bx + 2 * tp + 2, by + 2, tp, textCol);
+
+    // Delicate pointer notch beneath bubble pointing to Shiyan
+    var tipX = clamp(Math.round(shiyan.x), bx + 4, bx + bw - 5);
+    box(tipX - 1, by + bh, 2, 2, borderCol);
+
+    if (shiyan.hovered) {
+      box(bx + bw - 3, by + 2, 2, 2, borderCol);
+    }
+  }
+
+  function getShiyanHitBox() {
+    var p = layout.p;
+    var tp = Math.max(1, p <= 2 ? 1 : 2);
+    var bw = ('CLICK ME'.length * 4 * tp - tp) + 4 * tp + 4;
+    var bh = 5 * tp + 4;
+    var headTop = layout.fy - p - 16 * p;
+    var bx = Math.round(shiyan.x - bw / 2);
+    bx = clamp(bx, p * 2, layout.w - bw - p * 2);
+    var by = headTop - bh - 4 * p;
+
+    return {
+      minX: Math.min(bx - p * 2, shiyan.x - 7 * p),
+      maxX: Math.max(bx + bw + p * 2, shiyan.x + 7 * p),
+      minY: by - p * 2,
+      maxY: layout.fy + p * 2
+    };
+  }
+
+  function isOverShiyan(clientX, clientY) {
+    var rect = canvas.getBoundingClientRect();
+    var mx = clientX - rect.left;
+    var my = clientY - rect.top;
+    var box = getShiyanHitBox();
+    return mx >= box.minX && mx <= box.maxX && my >= box.minY && my <= box.maxY;
+  }
+
+  var SHIYAN_MODAL_ID = 'shiyan-modal';
+
+  function openShiyanModal() {
+    var modal = document.getElementById(SHIYAN_MODAL_ID);
+    if (!modal) return;
+    modal.classList.add('is-open');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    var closeBtn = modal.querySelector('#shiyan-modal-close');
+    if (closeBtn) closeBtn.focus();
+  }
+
+  function closeShiyanModal() {
+    var modal = document.getElementById(SHIYAN_MODAL_ID);
+    if (!modal) return;
+    modal.classList.remove('is-open');
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    if (canvas) canvas.focus();
+  }
+
+  function initShiyanInteractions() {
+    canvas.setAttribute('tabindex', '0');
+    canvas.setAttribute('role', 'button');
+    canvas.setAttribute('aria-label', "Interactive pixel office — Click Shiyan to view introduction");
+
+    canvas.addEventListener('mousemove', function (e) {
+      if (isOverShiyan(e.clientX, e.clientY)) {
+        if (!shiyan.hovered) {
+          shiyan.hovered = true;
+          canvas.style.cursor = 'pointer';
+        }
+      } else {
+        if (shiyan.hovered) {
+          shiyan.hovered = false;
+          canvas.style.cursor = 'default';
+        }
+      }
+    });
+
+    canvas.addEventListener('mouseleave', function () {
+      if (shiyan.hovered) {
+        shiyan.hovered = false;
+        canvas.style.cursor = 'default';
+      }
+    });
+
+    canvas.addEventListener('click', function (e) {
+      if (isOverShiyan(e.clientX, e.clientY)) {
+        openShiyanModal();
+      }
+    });
+
+    canvas.addEventListener('touchstart', function (e) {
+      if (e.touches && e.touches.length === 1) {
+        var t = e.touches[0];
+        if (isOverShiyan(t.clientX, t.clientY)) {
+          e.preventDefault();
+          openShiyanModal();
+        }
+      }
+    }, { passive: false });
+
+    canvas.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        openShiyanModal();
+      }
+    });
+
+    var modal = document.getElementById(SHIYAN_MODAL_ID);
+    if (modal) {
+      modal.addEventListener('click', function (e) {
+        if (e.target === modal || e.target.closest('#shiyan-modal-close')) {
+          closeShiyanModal();
+        }
+      });
+
+      var viewProjects = modal.querySelector('#shiyan-view-projects');
+      if (viewProjects) {
+        viewProjects.addEventListener('click', function () {
+          closeShiyanModal();
+        });
+      }
+
+      var contactBtn = modal.querySelector('#shiyan-contact-btn');
+      if (contactBtn) {
+        contactBtn.addEventListener('click', function () {
+          closeShiyanModal();
+          setTimeout(function () {
+            var nameField = document.getElementById('name');
+            if (nameField) nameField.focus();
+          }, 300);
+        });
+      }
+    }
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') {
+        var m = document.getElementById(SHIYAN_MODAL_ID);
+        if (m && m.classList.contains('is-open')) {
+          closeShiyanModal();
+        }
+      }
+    });
+
+    window.openShiyanModal = openShiyanModal;
+    window.closeShiyanModal = closeShiyanModal;
   }
 
   function render(time, still) {
@@ -605,6 +928,7 @@
     palette = readPalette();
     if (!computeLayout()) return;
     createAgents();
+    initShiyanInteractions();
     if (reduceMotion) drawStatic();
     else render(elapsed, false);
     observe();
