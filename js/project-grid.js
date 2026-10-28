@@ -24,8 +24,13 @@
     },
     'sales-data-cleanroom': {
       title: 'Naga City Crime Surveillance and Prevention',
-      subtitle: 'Analyzing crime cases in Naga City to identify patterns, trends, and risk factors for early crime prevention and control.',
-      image: 'assets/projects/',
+      subtitle: '',
+      image: 'assets/projects/1st.png',
+      images: [
+        'assets/projects/1st.png',
+        'assets/projects/2.png',
+        'assets/projects/3.png'
+      ],
       repoUrl: 'https://github.com/shiyannn/',
       visitLabel: 'View GitHub Repo',
       description: 'This report presents key data insights and action plans based on the Naga City Crime Dashboard. The goal is to lower crime cases, protect high-risk age groups, and keep community health systems strong.',
@@ -45,6 +50,91 @@
   var activeModal = null;
   var previousActiveElement = null;
 
+  // Modal image carousel state
+  var carouselImages = [];
+  var carouselIndex = 0;
+  var carouselTitle = '';
+  var carouselFadeTimer = null;
+
+  /**
+   * Renders the current carousel slide (with a short crossfade).
+   * @param {HTMLElement} modal
+   * @param {number} index
+   * @param {boolean} [immediate]
+   */
+  function showSlide(modal, index, immediate) {
+    var imgEl = modal.querySelector('#modal-img');
+    if (!imgEl || !carouselImages.length) return;
+
+    var total = carouselImages.length;
+    carouselIndex = ((index % total) + total) % total;
+
+    var apply = function () {
+      imgEl.src = carouselImages[carouselIndex];
+      imgEl.alt = carouselTitle + ' dashboard preview, image ' + (carouselIndex + 1) + ' of ' + total;
+      imgEl.classList.remove('is-fading');
+    };
+
+    if (carouselFadeTimer) {
+      window.clearTimeout(carouselFadeTimer);
+      carouselFadeTimer = null;
+    }
+
+    if (immediate) {
+      apply();
+    } else {
+      imgEl.classList.add('is-fading');
+      carouselFadeTimer = window.setTimeout(function () {
+        carouselFadeTimer = null;
+        apply();
+      }, 120);
+    }
+
+    var dots = modal.querySelectorAll('.carousel-dot');
+    for (var i = 0; i < dots.length; i++) {
+      var isActive = i === carouselIndex;
+      dots[i].classList.toggle('is-active', isActive);
+      dots[i].setAttribute('aria-current', isActive ? 'true' : 'false');
+    }
+  }
+
+  /**
+   * Builds the carousel for the given image list and shows the first slide.
+   * @param {HTMLElement} modal
+   * @param {string[]} images
+   * @param {string} title
+   */
+  function setupCarousel(modal, images, title) {
+    var dotsEl = modal.querySelector('#modal-dots');
+    var prevBtn = modal.querySelector('#modal-prev');
+    var nextBtn = modal.querySelector('#modal-next');
+
+    carouselImages = images;
+    carouselTitle = title;
+    carouselIndex = 0;
+
+    if (dotsEl) {
+      dotsEl.innerHTML = '';
+      images.forEach(function (src, i) {
+        var dot = document.createElement('button');
+        dot.type = 'button';
+        dot.className = 'carousel-dot';
+        dot.setAttribute('aria-label', 'Show image ' + (i + 1) + ' of ' + images.length);
+        dot.addEventListener('click', function () {
+          showSlide(modal, i);
+        });
+        dotsEl.appendChild(dot);
+      });
+    }
+
+    var hasMany = images.length > 1;
+    if (prevBtn) prevBtn.hidden = !hasMany;
+    if (nextBtn) nextBtn.hidden = !hasMany;
+    if (dotsEl) dotsEl.hidden = !hasMany;
+
+    showSlide(modal, 0, true);
+  }
+
   /**
    * Opens and populates the project modal
    * @param {string} projectId 
@@ -63,6 +153,7 @@
     var subtitle = data.subtitle || (card && card.getAttribute('data-summary')) || '';
     var description = data.description || (card && card.getAttribute('data-summary')) || 'Detailed case overview available upon request.';
     var image = data.image || (card && card.querySelector('img') && card.querySelector('img').src) || '';
+    var images = (data.images && data.images.length ? data.images : [image]).filter(Boolean);
 
     // Direct GitHub repository link from card data-repo / data-github or data dictionary
     var repoUrl = (card && (card.getAttribute('data-repo') || card.getAttribute('data-github'))) ||
@@ -74,7 +165,6 @@
     var badges = data.badges || (card && card.getAttribute('data-tech') ? card.getAttribute('data-tech').split(',').map(function (s) { return s.trim(); }) : []);
 
     // Populate modal DOM elements
-    var imgEl = modal.querySelector('#modal-img');
     var titleEl = modal.querySelector('#modal-title');
     var subtitleEl = modal.querySelector('#modal-subtitle');
     var visitEl = modal.querySelector('#modal-visit');
@@ -82,10 +172,7 @@
     var descEl = modal.querySelector('#modal-description');
     var badgesEl = modal.querySelector('#modal-badges');
 
-    if (imgEl) {
-      imgEl.src = image;
-      imgEl.alt = title + ' preview';
-    }
+    setupCarousel(modal, images, title);
     if (titleEl) titleEl.textContent = title;
     if (subtitleEl) subtitleEl.textContent = subtitle;
 
@@ -186,12 +273,57 @@
           closeProjectModal();
         }
       });
+
+      // Carousel arrows
+      var prevBtn = modal.querySelector('#modal-prev');
+      var nextBtn = modal.querySelector('#modal-next');
+      if (prevBtn) {
+        prevBtn.addEventListener('click', function () {
+          showSlide(modal, carouselIndex - 1);
+        });
+      }
+      if (nextBtn) {
+        nextBtn.addEventListener('click', function () {
+          showSlide(modal, carouselIndex + 1);
+        });
+      }
+
+      // Carousel swipe (touch)
+      var preview = modal.querySelector('#modal-carousel');
+      var touchStartX = null;
+      if (preview) {
+        preview.addEventListener('touchstart', function (event) {
+          if (event.touches.length !== 1) return;
+          touchStartX = event.touches[0].clientX;
+        }, { passive: true });
+
+        preview.addEventListener('touchend', function (event) {
+          if (touchStartX === null) return;
+          var dx = event.changedTouches[0].clientX - touchStartX;
+          touchStartX = null;
+          if (Math.abs(dx) < 40 || carouselImages.length < 2) return;
+          showSlide(modal, carouselIndex + (dx < 0 ? 1 : -1));
+        }, { passive: true });
+      }
     }
 
-    // Global Escape key handler
+    // Global Escape + carousel arrow keys
     document.addEventListener('keydown', function (event) {
-      if (event.key === 'Escape' && activeModal) {
+      if (!activeModal) return;
+
+      if (event.key === 'Escape') {
         closeProjectModal();
+        return;
+      }
+
+      if (carouselImages.length < 2) return;
+
+      if (event.key === 'ArrowLeft') {
+        event.preventDefault();
+        showSlide(activeModal, carouselIndex - 1);
+      } else if (event.key === 'ArrowRight') {
+        event.preventDefault();
+        showSlide(activeModal, carouselIndex + 1);
       }
     });
   }

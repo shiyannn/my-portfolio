@@ -262,19 +262,18 @@
         </div>
 
         <div class="project-grid" id="project-grid">
-          <article class="project-card reveal" data-project-id="revenue-command-center" role="button" tabindex="0"
-            aria-label="Open project: Revenue Command Center" data-title="Revenue Command Center" data-year="2024"
-            data-tech="SQL, Power BI, Excel" data-repo="https://github.com/shiyannn/Bike-buyers_customer-insights"
+          <article class="project-card reveal" data-project-id="sales-data-cleanroom" role="button" tabindex="0"
+            aria-label="Open project: Naga Crime Survaillance" data-title="Naga Crime Survaillance" data-year="2024"
+            data-tech="SQL, Power BI, Excel" data-repo="https://github.com/shiyannn/"
             data-summary="A single Power BI model consolidating nine regional source systems into one governed revenue dashboard.">
             <div class="project-media">
-              <img src="assets/projects/bike-customer_insight-dashboard.png"
-                alt="Multi-series revenue trend chart preview" loading="lazy" width="600" height="600" />
+              <img src="assets/projects/1st.png" alt="Multi-series revenue trend chart preview" loading="lazy"
+                width="600" height="600" />
             </div>
             <div class="project-overlay">
-              <h3 class="project-title">Bike-buyers_customer-insights</h3>
+              <h3 class="project-title">Naga City Crime Surveillance and Prevention</h3>
               <ul class="project-badges" aria-label="Technologies used">
                 <li>SQL</li>
-                <li>Power BI</li>
                 <li>Excel</li>
               </ul>
             </div>
@@ -298,22 +297,18 @@
               </ul>
             </div>
           </article>
-
-
-          <article class="project-card reveal" data-project-id="support-ops-scorecard" role="button" tabindex="0"
-            aria-label="Open project: Support Ops Scorecard" data-title="Support Ops Scorecard" data-year="2025"
-            data-tech="SQL, Power BI, Excel"
-            data-repo="https://github.com/shiyannn/Naga-City-Dengue-Surveillance-Outbreak-Control-Insights"
-            data-summary="Self-service Power BI scorecard tracking SLA breaches, agent load and backlog by region.">
+          <article class="project-card reveal" data-project-id="revenue-command-center" role="button" tabindex="0"
+            aria-label="Open project: Revenue Command Center" data-title="Revenue Command Center" data-year="2024"
+            data-tech="SQL, Power BI, Excel" data-repo="https://github.com/shiyannn/Bike-buyers_customer-insights"
+            data-summary="A single Power BI model consolidating nine regional source systems into one governed revenue dashboard.">
             <div class="project-media">
-              <img src="assets/projects/NagaDengueDashboard.png" alt="Diverging bar chart preview" loading="lazy"
-                width="600" height="600" />
+              <img src="assets/projects/bike-customer_insight-dashboard.png"
+                alt="Multi-series revenue trend chart preview" loading="lazy" width="600" height="600" />
             </div>
             <div class="project-overlay">
-              <h3 class="project-title">Naga City Dengue Surveillance-Outbreak Control Insights</h3>
+              <h3 class="project-title">Bike-buyers_customer-insights</h3>
               <ul class="project-badges" aria-label="Technologies used">
                 <li>SQL</li>
-                <li>Power BI</li>
                 <li>Excel</li>
               </ul>
             </div>
@@ -600,8 +595,22 @@
       </button>
 
       <div class="modal-scroll-body">
-        <div class="modal-preview">
+        <div class="modal-preview modal-carousel" id="modal-carousel">
           <img id="modal-img" src="" alt="Project Preview" />
+          <button class="carousel-arrow carousel-prev" id="modal-prev" type="button"
+            aria-label="Previous dashboard image">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2"
+              stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+          </button>
+          <button class="carousel-arrow carousel-next" id="modal-next" type="button" aria-label="Next dashboard image">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2"
+              stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </button>
+          <div class="carousel-dots" id="modal-dots" role="group" aria-label="Dashboard images"></div>
         </div>
 
         <h2 id="modal-title" class="modal-title"></h2>
