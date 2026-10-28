@@ -22,16 +22,16 @@
       description: 'This project focuses on analyzing customer demographic data and purchasing behavior for a bike retail business. Using Microsoft Excel (Pivot Tables, Advanced Formulas, and Data Visualization), an interactive dashboard was built to identify key customer segments, evaluate purchasing patterns, and uncover growth opportunities.',
       badges: ['Excel', 'Pivot Tables', 'Advanced Formulas', 'Data Visualization']
     },
-    'sales-data-cleanroom': {
+    'Naga Crime Survaillance': {
       title: 'Naga City Crime Surveillance and Prevention',
-      subtitle: '',
+      subtitle: 'Analyzing crime trends and risk factors in Naga City to identify patterns, trends, and risk factors for early outbreak detection and control.',
       image: 'assets/projects/1st.png',
       images: [
         'assets/projects/1st.png',
         'assets/projects/2.png',
         'assets/projects/3.png'
       ],
-      repoUrl: 'https://github.com/shiyannn/',
+      repoUrl: 'https://github.com/shiyannn/Naga-City-Crime-Surveillance-and-Prevention.git',
       visitLabel: 'View GitHub Repo',
       description: 'This report presents key data insights and action plans based on the Naga City Crime Dashboard. The goal is to lower crime cases, protect high-risk age groups, and keep community health systems strong.',
       badges: ['Power BI', 'Excel', 'Data Cleaning', 'SQL']
