@@ -25,11 +25,11 @@
     'Naga Crime Survaillance': {
       title: 'Naga City Crime Surveillance and Prevention',
       subtitle: 'Analyzing crime trends and risk factors in Naga City to identify patterns, trends, and risk factors for early outbreak detection and control.',
-      image: 'assets/projects/1st.png',
+      image: 'assets/projects/CrimeOverview.png',
       images: [
-        'assets/projects/1st.png',
-        'assets/projects/2.png',
-        'assets/projects/3.png'
+        'assets/projects/CrimeOverview.png',
+        'assets/projects/BarangayAnalysis.png',
+        'assets/projects/CaseAnalysis.png'
       ],
       repoUrl: 'https://github.com/shiyannn/Naga-City-Crime-Surveillance-and-Prevention.git',
       visitLabel: 'View GitHub Repo',
